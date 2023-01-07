@@ -37,7 +37,7 @@ public class Reservation {
     @Override
     public String toString() {
         String string_price = "US$" + String.format("%.2f", room.getRoomPrice());
-        return "\n=====================================================\n" +
+        return "=====================================================\n" +
                 "Reservation Info:\n" +
                 "=====================================================\n" +
                 "Customer       : " + customer.getName() +
