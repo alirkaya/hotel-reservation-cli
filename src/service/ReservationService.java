@@ -104,8 +104,10 @@ public class ReservationService {
     }
 
     public Collection<IRoom> findRooms(LocalDate checkInDate, LocalDate checkOutDate) {
-        if (checkInDate.isBefore(LocalDate.now())) {
-            System.out.println("ERROR: Check-In date cannot be less than today.");
+        LocalDate today = LocalDate.now();
+        if (checkInDate.isBefore(today)) {
+            System.out.println(
+                    "ERROR: Check-In date cannot be less than the current date (" + today + ").");
             return null;
         }
 
@@ -120,7 +122,6 @@ public class ReservationService {
         }
 
         if (rooms.isEmpty()) {
-            System.out.println("No available rooms between " + checkInDate + " - " + checkOutDate + ".");
             return null;
         }
 

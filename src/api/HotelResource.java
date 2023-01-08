@@ -19,14 +19,14 @@ public class HotelResource {
 
     private HotelResource() {}
 
-    public HotelResource getInstance() {return INSTANCE;}
+    public static HotelResource getInstance() {return INSTANCE;}
 
 
     public Customer getCustomer(String email) {
         return customerService.getCustomer(email);
     }
 
-    public void CreateACustomer(String firstName, String lastName, String email) {
+    public void createACustomer(String firstName, String lastName, String email) {
         customerService.addCustomer(firstName, lastName, email);
     }
 

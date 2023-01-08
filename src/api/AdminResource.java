@@ -20,7 +20,7 @@ public class AdminResource {
 
     private static final AdminResource INSTANCE = new AdminResource();
 
-    public AdminResource getInstance() {return INSTANCE;}
+    public static AdminResource getInstance() {return INSTANCE;}
 
 
     public Customer getCustomer(String email) {
