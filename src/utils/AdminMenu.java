@@ -65,7 +65,7 @@ public class AdminMenu {
 
         while (userResponse.equalsIgnoreCase("y")) {
             System.out.println(">>> Please! Enter room number: ");
-            String roomNumber = consoleManager.readStringInput();
+            String roomNumber = consoleManager.getValidRoomNumber();
 
             System.out.println(">>> Please! Enter the type of the room (1. Single 2. Double): ");
             String roomType = consoleManager.getValidRoomType();

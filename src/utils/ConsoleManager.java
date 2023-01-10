@@ -115,6 +115,17 @@ public class ConsoleManager {
         }
     }
 
+    public String getValidRoomNumber() {
+        while (true) {
+            try {
+                return String.valueOf(scanner.nextInt());
+            } catch (InputMismatchException exception) {
+                System.out.println(
+                        "ERROR: Invalid option. Please! Enter a stupid number: " + scanner.next());
+            }
+        }
+    }
+
     public void clearScreen() {
         System.out.print("\033[H\033[2J");
     }
