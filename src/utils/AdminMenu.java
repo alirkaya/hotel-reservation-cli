@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class AdminMenu {
 
     private final AdminResource adminResource = AdminResource.getInstance();
-    private final ManageConsole manager = new ManageConsole();
+    private final ConsoleManager consoleManager = new ConsoleManager();
 
 
     private static final AdminMenu INSTANCE = new AdminMenu();
@@ -45,6 +45,10 @@ public class AdminMenu {
 
     public void seeAllRooms() {
         Collection<IRoom> allRooms = adminResource.getAllRooms();
+        if (allRooms.size() == 0 ) {
+            System.out.println("No rooms to show.");
+            return;
+        }
         for(IRoom room : allRooms) {
             System.out.println(room);
         }
@@ -57,54 +61,40 @@ public class AdminMenu {
     public void addARoom() {
         ArrayList<IRoom> rooms = new ArrayList<>();
         String userResponse = "y";
-        manager.readStringInput();
+        consoleManager.readStringInput();
 
         while (userResponse.equalsIgnoreCase("y")) {
             System.out.println(">>> Please! Enter room number: ");
-            String roomNumber = manager.readStringInput();
+            String roomNumber = consoleManager.readStringInput();
 
             System.out.println(">>> Please! Enter the type of the room (1. Single 2. Double): ");
-            int roomType = manager.getValidRoomType();
-            RoomType enumeration = (roomType == 1) ? RoomType.SINGLE : RoomType.DOUBLE;
-            manager.readStringInput();
+            String roomType = consoleManager.getValidRoomType();
+            RoomType enumeration = (roomType.equals("1")) ? RoomType.SINGLE : RoomType.DOUBLE;
+            consoleManager.readStringInput();
 
             System.out.println(">>> Is this a free room (y/n)? ");
-            String isFreeRoom = manager.getValidInputYesNo();
+            String isFreeRoom = consoleManager.getValidInputYesNo();
             if (isFreeRoom.equalsIgnoreCase("y")) {
                 rooms.add(new FreeRoom(roomNumber, enumeration));
             }
             else {
                 System.out.println(">>>Please! Enter the room price: ");
-                Double roomPrice = manager.readDoubleInput();
+                Double roomPrice = consoleManager.readDoubleInput();
                 rooms.add(new Room(roomNumber, roomPrice, enumeration));
-                manager.readStringInput();
+                consoleManager.readStringInput();
             }
 
             System.out.println(">>> Would you like to add another room (y/n)?");
-            userResponse = manager.getValidInputYesNo();
+            userResponse = consoleManager.getValidInputYesNo();
         }
 
         adminResource.addRoom(rooms);
     }
 
-    private int getValidUserInput() {
-        int user_response = manager.readIntegerInput();
-        while (true) {
-            if (user_response >= 1 && user_response <= 5) {
-                break;
-            }
-            else {
-                System.out.println("ERROR: Invalid option. Please! Enter a valid option (1-5): ");
-                user_response = manager.readIntegerInput();
-            }
-        }
-        return user_response;
-    }
-
     public void manageMenuOptions() {
         this.printMenuOptions();
         System.out.println(">>> Please! Enter your choice: ");
-        int user_response = this.getValidUserInput();
+        int user_response = consoleManager.getValidMenuInput();
 
         switch (user_response) {
             case 1:

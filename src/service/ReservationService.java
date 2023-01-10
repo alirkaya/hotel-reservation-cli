@@ -116,6 +116,11 @@ public class ReservationService {
             return null;
         }
 
+        if (checkInDate.equals(checkOutDate)) {
+            System.out.println("ERROR: Check-in and Check-out days cannot be the same day.");
+            return null;
+        }
+
         if (ChronoUnit.DAYS.between(checkInDate, checkOutDate) > 45) {
             System.out.println("ERROR: Reservations more than 45 days are not allowed.");
             return null;
@@ -170,6 +175,11 @@ public class ReservationService {
                     activeReservations.add(record);
                 }
             }
+        }
+
+        if (activeReservations.isEmpty()) {
+            System.out.println("No reservations to show.");
+            return;
         }
 
         int counter = 1;

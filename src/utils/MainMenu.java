@@ -1,12 +1,9 @@
 package utils;
 
-import api.AdminResource;
 import api.HotelResource;
-import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
-import javax.imageio.spi.RegisterableService;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -17,7 +14,7 @@ public class MainMenu {
 
     private final HotelResource hotelResource = HotelResource.getInstance();
     private final AdminMenu adminMenu = AdminMenu.getInstance();
-    private final ManageConsole manager = new ManageConsole();
+    private final ConsoleManager consoleManager = new ConsoleManager();
 
 
     private static final MainMenu INSTANCE = new MainMenu();
@@ -50,9 +47,9 @@ public class MainMenu {
                 Welcome to Reservation Page
                 =====================================================
                 """);
-        LocalDate checkInDate = manager.readCheckInDate();
+        LocalDate checkInDate = consoleManager.readCheckInDate();
         if (checkInDate == null) {return null;}
-        LocalDate checkOutDate = manager.readCheckOutDate();
+        LocalDate checkOutDate = consoleManager.readCheckOutDate();
         if (checkOutDate == null) {return null;}
 
         LocalDate today = LocalDate.now();
@@ -77,8 +74,8 @@ public class MainMenu {
         }
 
         System.out.println("\n>>> Please enter the room number: ");
-        manager.readStringInput();
-        String roomNumber = manager.readStringInput();
+        consoleManager.readStringInput();
+        String roomNumber = consoleManager.readStringInput();
         while (true) {
             if (roomMap.containsKey(roomNumber)) {
                 break;
@@ -86,13 +83,13 @@ public class MainMenu {
             else {
                 System.out.println("ERROR: Invalid room number (" + roomNumber + ").");
                 System.out.println(">>> Would you like to cancel the transaction (y/n): ");
-                String user_response = manager.getValidInputYesNo();
+                String user_response = consoleManager.getValidInputYesNo();
                 if (user_response.equalsIgnoreCase("y")) {
                     System.out.println("Returning to the Main Menu!");
                     return null;
                 }
                 System.out.println(">>> Please! Enter a valid room number: ");
-                roomNumber = manager.readStringInput();
+                roomNumber = consoleManager.readStringInput();
             }
         }
 
@@ -103,11 +100,11 @@ public class MainMenu {
 
     private String getUserAccountDetails() {
         System.out.println(">>> Do you hava an account (y/n)? ");
-        String user_response = manager.getValidInputYesNo();
+        String user_response = consoleManager.getValidInputYesNo();
 
         if (user_response.equalsIgnoreCase("n")) {
             System.out.println(">>> Would you like to create one (y/n)? ");
-            String createAccount = manager.getValidInputYesNo();
+            String createAccount = consoleManager.getValidInputYesNo();
             if (createAccount.equalsIgnoreCase("n")) {
                 return null;
             }
@@ -116,12 +113,12 @@ public class MainMenu {
         }
 
         System.out.println(">>> Please! Enter your email address: ");
-        return manager.getValidCustomerEmail();
+        return consoleManager.getValidCustomerEmail();
     }
 
     public void seeMyReservations() {
         System.out.println(">>> Please! Enter your email address: ");
-        String customerEmail = manager.getValidCustomerEmail();
+        String customerEmail = consoleManager.getValidCustomerEmail();
 
         Collection<Reservation> customerReservations = hotelResource.getCustomerReservations(customerEmail);
         if (customerReservations == null) {
@@ -136,13 +133,13 @@ public class MainMenu {
 
     public void createAnAccount() {
         System.out.println(">>> Please! Enter your email address: ");
-        String customerEmail = manager.getValidCustomerEmail();
+        String customerEmail = consoleManager.getValidCustomerEmail();
 
         System.out.println(">>> Please! Enter your first name: ");
-        String firstName = manager.getValidCustomerName();
+        String firstName = consoleManager.getValidCustomerName();
 
         System.out.println(">>> Please! Enter your last name: ");
-        String lastName = manager.getValidCustomerName();
+        String lastName = consoleManager.getValidCustomerName();
 
         hotelResource.createACustomer(firstName, lastName, customerEmail);
 
@@ -152,8 +149,8 @@ public class MainMenu {
     public void manageMenuOptions() {
         this.printMenuOptions();
         System.out.println(">>> Please! Enter your choice: ");
-        int user_response = this.getValidUserInput();
-        manager.readStringInput();
+        int user_response = consoleManager.getValidMenuInput();
+        consoleManager.readStringInput();
 
         switch (user_response) {
             case 1 :
@@ -183,19 +180,5 @@ public class MainMenu {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private int getValidUserInput() {
-        int user_response = manager.readIntegerInput();
-        while (true) {
-            if (user_response >= 1 && user_response <= 5) {
-                break;
-            }
-            else {
-                System.out.println("ERROR: Invalid option. Please! Enter a valid option (1-5): ");
-                user_response = manager.readIntegerInput();
-            }
-        }
-        return user_response;
     }
 }
