@@ -60,12 +60,20 @@ public class AdminMenu {
 
     public void addARoom() {
         ArrayList<IRoom> rooms = new ArrayList<>();
+        ArrayList<String> roomNumbers = new ArrayList<>();
+
         String userResponse = "y";
         consoleManager.readStringInput();
 
         while (userResponse.equalsIgnoreCase("y")) {
             System.out.println(">>> Please! Enter room number: ");
             String roomNumber = consoleManager.getValidRoomNumber();
+
+            if (roomNumbers.contains(roomNumber)) {
+                System.out.println("Room " + roomNumber + " already exists.");
+                break;
+            }
+            roomNumbers.add(roomNumber);
 
             System.out.println(">>> Please! Enter the type of the room (1. Single 2. Double): ");
             String roomType = consoleManager.getValidRoomType();
