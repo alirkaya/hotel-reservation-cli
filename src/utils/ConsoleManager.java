@@ -13,11 +13,8 @@ public class ConsoleManager {
     public int getValidIntegerInput() {
         String errorMessage = "ERROR: Invalid input. Please! Enter a numeric value: ";
         while (true) {
-            try {
-                int user_response = scanner.nextInt();
-                scanner.nextLine();
-                return user_response;}
-            catch (InputMismatchException exception) { System.out.println(errorMessage); }
+            try { return Integer.parseInt(scanner.nextLine()); }
+            catch (NumberFormatException exception) { System.out.println(errorMessage); }
         }
     }
 
