@@ -76,7 +76,7 @@ public class MainMenu {
             System.out.println("No available rooms between " + checkInDate + " - " + checkOutDate + "\n");
             System.out.println(">>> Would you like to check alternative dates (y/n)? ");
             String user_response = consoleManager.getValidInputYesNo();
-            if (user_response.equals("n")) {
+            if (user_response.equalsIgnoreCase("n")) {
                 return null;
             }
 
@@ -125,7 +125,7 @@ public class MainMenu {
                 System.out.println("ERROR: Invalid room number (" + roomNumber + ").");
                 System.out.println(">>> Would you like to cancel the transaction (y/n): ");
                 String user_response = consoleManager.getValidInputYesNo();
-                if (user_response.equals("y")) {
+                if (user_response.equalsIgnoreCase("y")) {
                     System.out.println("Returning to the Main Menu!");
                     return null;
                 }
@@ -142,7 +142,7 @@ public class MainMenu {
         System.out.println(">>> Do you hava an account (y/n)? ");
         String user_response = consoleManager.getValidInputYesNo();
 
-        if (user_response.equals("y")) {
+        if (user_response.equalsIgnoreCase("y")) {
             System.out.println(">>> Please! Enter your email address: ");
             String customerEmail = consoleManager.getValidCustomerEmail();
 
@@ -156,7 +156,7 @@ public class MainMenu {
 
         System.out.println(">>> Would you like to create one (y/n)? ");
         String createAccount = consoleManager.getValidInputYesNo();
-        if (createAccount.equals("n")) {
+        if (createAccount.equalsIgnoreCase("n")) {
             return null;
         }
 

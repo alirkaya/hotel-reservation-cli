@@ -63,7 +63,7 @@ public class ConsoleManager {
             System.out.println("ERROR: Invalid input. Please! Enter 'y' or 'n': ");
             user_response = this.readStringInput();
         }
-        return user_response.toLowerCase();
+        return user_response;
     }
 
     public String getValidCustomerName(String kind) {
@@ -73,7 +73,7 @@ public class ConsoleManager {
             System.out.println(">>> Please! Enter a valid " + kind + " name: ");
             name = this.readStringInput();
         }
-        return name.toLowerCase();
+        return name.toUpperCase();
     }
 
     public String getValidCustomerEmail() {
@@ -100,23 +100,17 @@ public class ConsoleManager {
     public String getValidRoomType() {
         String roomType = "";
         while (true) {
-            roomType = scanner.next().trim();
-
-            if (roomType.equals("1") || roomType.equals("2")) {
-                return roomType;
-            }
-
+            roomType = scanner.nextLine().trim();
+            if (roomType.equals("1") || roomType.equals("2")) { return roomType; }
             System.out.println("ERROR: Invalid input. Please! Enter 1 or 2: ");
         }
     }
 
     public String getValidRoomNumber() {
         while (true) {
-            try {
-                return String.valueOf(scanner.nextInt());
-            } catch (InputMismatchException exception) {
-                System.out.println(
-                        "ERROR: Invalid option. Please! Enter a number: " + scanner.next());
+            try { return String.valueOf(scanner.nextInt()); }
+            catch (InputMismatchException exception) {
+                System.out.println("ERROR: Invalid option. Please! Enter a number: " + scanner.next());
             }
         }
     }

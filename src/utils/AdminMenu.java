@@ -35,9 +35,7 @@ public class AdminMenu {
 
     public void seeAllCustomers() {
         Collection<Customer> allCustomers = adminResource.getAllCustomers();
-        if (allCustomers.isEmpty()) {
-            System.out.println("Currently, there are no customers in the system!");
-        }
+        if (allCustomers.isEmpty()) { System.out.println("Currently, there are no customers in the system!"); }
         for(Customer customer : allCustomers) {
             System.out.println(customer);
         }
@@ -65,8 +63,8 @@ public class AdminMenu {
         String userResponse = "y";
         consoleManager.readStringInput();
 
-        while (userResponse.equals("y")) {
-            System.out.println(">>> Please! Enter room number: ");
+        while (userResponse.equalsIgnoreCase("y")) {
+            System.out.println(">>> Please! Enter room number (e.g. 101): ");
             String roomNumber = consoleManager.getValidRoomNumber();
 
             if (roomNumbers.contains(roomNumber)) {
@@ -82,11 +80,11 @@ public class AdminMenu {
 
             System.out.println(">>> Is this a free room (y/n)? ");
             String isFreeRoom = consoleManager.getValidInputYesNo();
-            if (isFreeRoom.equals("y")) {
+            if (isFreeRoom.equalsIgnoreCase("y")) {
                 rooms.add(new FreeRoom(roomNumber, enumeration));
             }
             else {
-                System.out.println(">>>Please! Enter the room price: ");
+                System.out.println(">>>Please! Enter the room price (e.g. 79.99): ");
                 Double roomPrice = consoleManager.readDoubleInput();
                 rooms.add(new Room(roomNumber, roomPrice, enumeration));
                 consoleManager.readStringInput();
