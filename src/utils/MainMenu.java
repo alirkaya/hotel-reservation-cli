@@ -70,7 +70,21 @@ public class MainMenu {
         return true;
     }
 
-    private Collection<IRoom> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate) {
+    public Reservation findAndReserveARoom() {
+        System.out.println("""
+                =====================================================
+                Welcome to Reservation Page
+                =====================================================
+                """);
+
+        String customerEmail = this.getUserAccountDetails();
+        if (customerEmail == null) { return null; }
+
+        LocalDate checkInDate = consoleManager.readCheckInDate();
+        LocalDate checkOutDate = consoleManager.readCheckOutDate();
+        boolean isValidDates = this.isValidCheckInOutDays(checkInDate, checkOutDate);
+        if (!isValidDates) { return null; }
+
         Collection<IRoom> availableRooms = hotelResource.findARoom(checkInDate, checkOutDate);
         while (availableRooms.size() == 0) {
             System.out.println("No available rooms between " + checkInDate + " - " + checkOutDate + "\n");
@@ -87,40 +101,15 @@ public class MainMenu {
             availableRooms = hotelResource.findARoom(checkInDate, checkOutDate);
         }
 
-        return availableRooms;
-    }
-
-    public Reservation findAndReserveARoom() {
-        System.out.println("""
-                =====================================================
-                Welcome to Reservation Page
-                =====================================================
-                """);
-
-        String customerEmail = this.getUserAccountDetails();
-        if (customerEmail == null) { return null; }
-
-        LocalDate checkInDate = consoleManager.readCheckInDate();
-        LocalDate checkOutDate = consoleManager.readCheckOutDate();
-        boolean isValidDates = this.isValidCheckInOutDays(checkInDate, checkOutDate);
-        if (!isValidDates) { return null; }
-
-        Collection<IRoom> availableRooms = this.getAvailableRooms(checkInDate, checkOutDate);
-        if (availableRooms == null) { return null; }
-
         HashMap<String, IRoom> roomMap = new HashMap<>();
         for(IRoom room : availableRooms) {
             System.out.println(room);
             roomMap.put(room.getRoomNumber(), room);
         }
 
-        System.out.println("\n>>> Please enter the room number: "); //TODO validate room number input
-        consoleManager.readStringInput();
-        String roomNumber = consoleManager.readStringInput();
+        String roomNumber = consoleManager.getValidRoomNumber();
         while (true) {
-            if (roomMap.containsKey(roomNumber)) {
-                break;
-            }
+            if (roomMap.containsKey(roomNumber)) break;
             else {
                 System.out.println("ERROR: Invalid room number (" + roomNumber + ").");
                 System.out.println(">>> Would you like to cancel the transaction (y/n): ");
@@ -129,8 +118,7 @@ public class MainMenu {
                     System.out.println("Returning to the Main Menu!");
                     return null;
                 }
-                System.out.println(">>> Please! Enter a valid room number: ");
-                roomNumber = consoleManager.readStringInput(); //TODO validate room number as integer
+                roomNumber = consoleManager.getValidRoomNumber();
             }
         }
 
@@ -143,7 +131,7 @@ public class MainMenu {
         String user_response = consoleManager.getValidInputYesNo();
 
         if (user_response.equalsIgnoreCase("y")) {
-            System.out.println(">>> Please! Enter your email address: ");
+            System.out.println(">>> Please! Enter your email address (e.g. name@domain.com): ");
             String customerEmail = consoleManager.getValidCustomerEmail();
 
             Customer userAccount = adminResource.getCustomer(customerEmail);
@@ -164,7 +152,7 @@ public class MainMenu {
     }
 
     public void seeMyReservations() {
-        System.out.println(">>> Please! Enter your email address: ");
+        System.out.println(">>> Please! Enter your email address (e.g. name@domain.com): ");
         String customerEmail = consoleManager.getValidCustomerEmail();
 
         Collection<Reservation> customerReservations = hotelResource.getCustomerReservations(customerEmail);
@@ -179,7 +167,7 @@ public class MainMenu {
     }
 
     public String createAnAccount() {
-        System.out.println(">>> Please! Enter your email address: ");
+        System.out.println(">>> Please! Enter your email address (e.g. name@domain.com): ");
         String customerEmail = consoleManager.getValidCustomerEmail();
 
         System.out.println(">>> Please! Enter your first name: ");

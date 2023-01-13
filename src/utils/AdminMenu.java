@@ -11,6 +11,7 @@ public class AdminMenu {
 
     private final AdminResource adminResource = AdminResource.getInstance();
     private final ConsoleManager consoleManager = new ConsoleManager();
+    private final TestData testData = new TestData();
 
 
     private static final AdminMenu INSTANCE = new AdminMenu();
@@ -23,11 +24,12 @@ public class AdminMenu {
                 """
                 =====================================================
                 Admin Menu:
-                1. See all customers
+                1. See all Customers
                 2. See all Rooms
                 3. See all Reservations
-                4. Add a room
-                5. Back to Main Menu
+                4. Add a Room
+                5. Add Test Data
+                6. Back to Main Menu
                 =====================================================
                 """
         );
@@ -87,7 +89,7 @@ public class AdminMenu {
     public void manageMenuOptions() {
         this.printMenuOptions();
         int minValue = 1;
-        int maxValue = 5;
+        int maxValue = 6;
 
         int user_response = consoleManager.getValidMenuInput(minValue, maxValue);
 
@@ -113,6 +115,11 @@ public class AdminMenu {
                 break;
 
             case 5:
+                testData.createTestData();
+                System.out.println("\nRedirecting to the Main Menu ...\n");
+                break;
+
+            case 6:
                 System.out.println("\nRedirecting to the Main Menu ...\n");
                 break;
         }

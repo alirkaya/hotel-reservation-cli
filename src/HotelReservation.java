@@ -1,3 +1,4 @@
+import model.Customer;
 import utils.ConsoleManager;
 import utils.MainMenu;
 

@@ -5,22 +5,21 @@ import java.util.HashMap;
 
 public class CustomerService {
 
+
     private final HashMap<String, Customer> customers = new HashMap<String, Customer>();
-
     private static final CustomerService INSTANCE = new CustomerService();
-
     private CustomerService() {}
+
 
     public void addCustomer(String firstName, String lastName, String email) {
         String key = email.toLowerCase();
+        Customer newCustomer = new Customer(firstName, lastName, email);
         if (customers.containsKey(key)) {
             System.out.println("The account already exists. Please! Sign in!!!");
+            return;
         }
-        else {
-            Customer value = new Customer(firstName, lastName, email);
-            customers.put(key, value);
-            System.out.println("Customer account has been successfully created.");
-        }
+        customers.put(key, newCustomer);
+        System.out.println("Customer account has been successfully created.");
     }
 
     public Customer getCustomer(String customerEmail) {

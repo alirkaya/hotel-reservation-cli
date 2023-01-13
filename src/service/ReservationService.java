@@ -25,21 +25,17 @@ public class ReservationService {
         String roomNumber = room.getRoomNumber();
         if (rooms.containsKey(roomNumber)) {
             System.out.println("Room " + roomNumber + " already exists.");
+            return;
         }
-        else {
-            rooms.put(roomNumber, room);
-            System.out.println("Room " + roomNumber + " has been successfully added.");
-        }
-    };
+        rooms.put(roomNumber, room);
+        System.out.println("Room " + roomNumber + " has been successfully added.");
+
+    }
 
     public IRoom getARoom(String roomId) {
-        if (rooms.containsKey(roomId)) {
-            return rooms.get(roomId);
-        }
-        else {
-            System.out.println("ERROR: Room " + roomId + " doesn't exists. Please! double-check the room number.");
-            return null;
-        }
+        if (rooms.containsKey(roomId)) return rooms.get(roomId);
+        System.out.println("ERROR: Room " + roomId + " doesn't exists. Please! double-check the room number.");
+        return null;
     }
 
     // https://stackoverflow.com/questions/19064109/java-how-to-sort-custom-type-arraylist
