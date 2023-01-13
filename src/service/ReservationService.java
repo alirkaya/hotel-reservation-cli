@@ -10,8 +10,8 @@ import java.time.LocalDate;
 
 public class ReservationService {
 
-    private final HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
-    private final HashMap<String, ArrayList<Reservation>> reservations = new HashMap<String, ArrayList<Reservation>>();
+    private final Map<String, IRoom> rooms = new HashMap<String, IRoom>();
+    private final Map<String, ArrayList<Reservation>> reservations = new HashMap<String, ArrayList<Reservation>>();
 
 
     private static final ReservationService INSTANCE = new ReservationService();
@@ -44,24 +44,14 @@ public class ReservationService {
 
     // https://stackoverflow.com/questions/19064109/java-how-to-sort-custom-type-arraylist
     public Reservation reserveARoom(Customer customer, IRoom room, LocalDate checkInDate, LocalDate checkOutDate) {
-        if (checkInDate.isBefore(LocalDate.now())) {
-            System.out.println("Check-In date cannot be less than today.");
-            return null;
-        }
-
-        if (checkOutDate.isBefore(checkInDate)) {
-            System.out.println("Check-Out date has to be greater than Check-In date.");
-            return null;
-        }
-
         if (!rooms.containsKey(room.getRoomNumber())) {
             System.out.println(
                     "ERROR: Room " + room.getRoomNumber() + " doesn't exist. Please! double-check the room number");
             return null;
         }
 
-        Collection<IRoom> availableRooms = this.findRooms(checkInDate, checkOutDate);
-        if (availableRooms == null) {
+        Collection<IRoom> availableRooms = this.findRooms(checkInDate, checkOutDate);  //TODO correct this one for getting an empty list of rooms
+        if (availableRooms.isEmpty()) {
             return null;
         }
         if (!availableRooms.contains(room)) {
@@ -104,35 +94,8 @@ public class ReservationService {
     }
 
     public Collection<IRoom> findRooms(LocalDate checkInDate, LocalDate checkOutDate) {
-        LocalDate today = LocalDate.now();
-        if (checkInDate.isBefore(today)) {
-            System.out.println(
-                    "ERROR: Check-In date cannot be less than the current date (" + today + ").");
-            return null;
-        }
 
-        if (checkOutDate.isBefore(checkInDate)) {
-            System.out.println("ERROR: Check-Out date has to be greater than Check-In date.");
-            return null;
-        }
-
-        if (checkInDate.equals(checkOutDate)) {
-            System.out.println("ERROR: Check-in and Check-out days cannot be the same day.");
-            return null;
-        }
-
-        if (ChronoUnit.DAYS.between(checkInDate, checkOutDate) > 45) {
-            System.out.println("ERROR: Reservations more than 45 days are not allowed.");
-            return null;
-        }
-
-        if (rooms.isEmpty()) {
-            return null;
-        }
-
-        if (reservations.isEmpty()) {
-            return rooms.values();
-        }
+        if (rooms.isEmpty() || reservations.isEmpty()) { return rooms.values(); }
 
         ArrayList<String> bookedRooms = new ArrayList<>();
         for (Map.Entry<String, ArrayList<Reservation>> reservationEntry: reservations.entrySet()) {
@@ -152,10 +115,6 @@ public class ReservationService {
             }
         }
 
-        if (availableRooms.size() == 0) {
-            System.out.println("No available rooms between " + checkInDate + " - " + checkOutDate + ".");
-            return null;
-        }
         return availableRooms;
     }
 

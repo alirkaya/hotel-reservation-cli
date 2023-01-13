@@ -1,9 +1,8 @@
 package utils;
 
-import model.Customer;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -11,46 +10,46 @@ public class ConsoleManager {
 
     Scanner scanner = new Scanner(System.in);
 
-    public int getValidMenuInput() {
-        int user_response = 0;
+    public int getValidIntegerInput() {
+        String errorMessage = "ERROR: Invalid input. Please! Enter a numeric value: ";
         while (true) {
             try {
-                user_response = scanner.nextInt();
-            }
-            catch (InputMismatchException exception) {
-                System.out.println(
-                        "ERROR: Invalid option. Please! Enter a numeric value between 1-5: " + scanner.next());
-            }
+                int user_response = scanner.nextInt();
+                scanner.nextLine();
+                return user_response;}
+            catch (InputMismatchException exception) { System.out.println(errorMessage); }
+        }
+    }
 
-            if (user_response >= 1 && user_response <= 5) {
+    public int getValidMenuInput(int minValue, int maxValue) {
+        System.out.println(">>> Please! Enter your choice (1-5): ");
+        while (true) {
+            int user_response = this.getValidIntegerInput();
+            if (user_response >= minValue && user_response <= maxValue) {
                 return user_response;
+            } else {
+                System.out.println("ERROR: Invalid option. Please! Select a menu option between 1-5: ");
+            }
+        }
+    }
+
+    public LocalDate readDate() {
+        while (true) {
+            try { return LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("MM/dd/yyyy")); }
+            catch (DateTimeParseException exception) {
+                System.out.println("ERROR: Please! Enter a date (MM/DD/YYYY): ");
             }
         }
     }
 
     public LocalDate readCheckInDate() {
-        while (true) {
-            try {
-                System.out.print(">>> Please! Enter check-in date (MM/DD/YYYY): ");
-                String date_string = scanner.next();
-                return LocalDate.parse(date_string, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-            } catch (Exception e) {
-                System.out.println("ERROR: Please! Enter a date (MM/DD/YYYY): ");
-            }
-        }
+        System.out.println(">>> Please! Enter the check-in date (MM/DD/YYYY): ");
+        return this.readDate();
     }
 
     public LocalDate readCheckOutDate() {
-        while (true) {
-            try {
-                System.out.print(">>> Please! Enter check-out date (MM/DD/YYYY): ");
-                String date_string = scanner.next();
-                return LocalDate.parse(date_string, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-            }
-            catch (Exception e) {
-                System.out.println("ERROR: Please! Enter a date (MM/DD/YYYY): ");
-            }
-        }
+        System.out.println(">>> Please! Enter the check-out date (MM/DD/YYYY): ");
+        return this.readDate();
     }
 
     public String readStringInput() {
@@ -62,29 +61,29 @@ public class ConsoleManager {
     }
 
     public String getValidInputYesNo() {
-        String user_response = this.readStringInput();
+        String user_response = this.readStringInput().trim();
         while (!this.isValidInputYesNo(user_response)) {
             System.out.println("ERROR: Invalid input. Please! Enter 'y' or 'n': ");
             user_response = this.readStringInput();
         }
-        return user_response;
+        return user_response.toLowerCase();
     }
 
-    public String getValidCustomerName() {
-        String name = this.readStringInput();
+    public String getValidCustomerName(String kind) {
+        String name = this.readStringInput().trim();
         while (name.isEmpty() || name.isBlank()) {
-            System.out.println("ERROR: Invalid first name.");
-            System.out.println(">>> Please! Enter a valid first name: ");
+            System.out.println("ERROR: Invalid " + kind + " name.");
+            System.out.println(">>> Please! Enter a valid " + kind + " name: ");
             name = this.readStringInput();
         }
-        return name;
+        return name.toLowerCase();
     }
 
     public String getValidCustomerEmail() {
-        String customerEmail = this.readStringInput();
+        String customerEmail = this.readStringInput().trim();
         while (true) {
             if (customerEmail.matches("[\\w._]+@[\\w]+\\.com")) {
-                return customerEmail;
+                return customerEmail.toLowerCase();
             }
             System.out.println(
                     "Not a valid email! Please use name@domain.com format. Only '.' and '_' are allowed in name.");
@@ -94,9 +93,8 @@ public class ConsoleManager {
 
     public Double readDoubleInput() {
         while (true) {
-            try {
-                return scanner.nextDouble();
-            } catch (Exception e) {
+            try { return scanner.nextDouble(); }
+            catch (Exception e) {
                 System.out.println("ERROR: Please! Enter room price (e.g. 150.99) : " + scanner.next());
             }
         }
@@ -105,7 +103,7 @@ public class ConsoleManager {
     public String getValidRoomType() {
         String roomType = "";
         while (true) {
-            roomType = scanner.next();
+            roomType = scanner.next().trim();
 
             if (roomType.equals("1") || roomType.equals("2")) {
                 return roomType;
@@ -121,7 +119,7 @@ public class ConsoleManager {
                 return String.valueOf(scanner.nextInt());
             } catch (InputMismatchException exception) {
                 System.out.println(
-                        "ERROR: Invalid option. Please! Enter a stupid number: " + scanner.next());
+                        "ERROR: Invalid option. Please! Enter a number: " + scanner.next());
             }
         }
     }

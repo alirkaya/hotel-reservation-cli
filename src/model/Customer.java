@@ -32,7 +32,7 @@ public class Customer {
         if (Customer.checkEmail(email)) {this.email = email;}
     }
 
-    public static boolean checkEmail(String email) {
+    private static boolean checkEmail(String email) {
         if (email.matches("[\\w._]+@[\\w]+\\.com")) {return true;}
         else {
             throw new IllegalArgumentException(

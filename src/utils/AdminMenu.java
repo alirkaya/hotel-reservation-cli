@@ -65,7 +65,7 @@ public class AdminMenu {
         String userResponse = "y";
         consoleManager.readStringInput();
 
-        while (userResponse.equalsIgnoreCase("y")) {
+        while (userResponse.equals("y")) {
             System.out.println(">>> Please! Enter room number: ");
             String roomNumber = consoleManager.getValidRoomNumber();
 
@@ -82,7 +82,7 @@ public class AdminMenu {
 
             System.out.println(">>> Is this a free room (y/n)? ");
             String isFreeRoom = consoleManager.getValidInputYesNo();
-            if (isFreeRoom.equalsIgnoreCase("y")) {
+            if (isFreeRoom.equals("y")) {
                 rooms.add(new FreeRoom(roomNumber, enumeration));
             }
             else {
@@ -101,8 +101,10 @@ public class AdminMenu {
 
     public void manageMenuOptions() {
         this.printMenuOptions();
-        System.out.println(">>> Please! Enter your choice: ");
-        int user_response = consoleManager.getValidMenuInput();
+        int minValue = 1;
+        int maxValue = 5;
+
+        int user_response = consoleManager.getValidMenuInput(minValue, maxValue);
 
         switch (user_response) {
             case 1:

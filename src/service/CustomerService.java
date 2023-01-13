@@ -25,13 +25,7 @@ public class CustomerService {
 
     public Customer getCustomer(String customerEmail) {
         String key = customerEmail.toLowerCase();
-        if (customers.containsKey(key)) {
-            return customers.get(key);
-        }
-        else {
-            System.out.println("No such account exists. Please! Create an account.");
-            return null;
-        }
+        return customers.getOrDefault(key, null);
     }
 
     public Collection<Customer> getAllCustomers() {
