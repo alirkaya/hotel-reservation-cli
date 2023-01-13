@@ -1,5 +1,7 @@
 package utils;
 
+import model.RoomType;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -88,31 +90,42 @@ public class ConsoleManager {
         }
     }
 
-    public Double readDoubleInput() {
+    public double getValidRoomPrice() {
+        System.out.println(">>>Please! Enter the room price (e.g. 79.99): ");
         while (true) {
-            try { return scanner.nextDouble(); }
-            catch (Exception e) {
-                System.out.println("ERROR: Please! Enter room price (e.g. 150.99) : " + scanner.next());
+            try { return Double.parseDouble(scanner.nextLine()); }
+            catch (NumberFormatException e) {
+                System.out.println("ERROR: Please! Enter room price (e.g. 79.99) : ");
             }
         }
     }
 
-    public String getValidRoomType() {
+    public RoomType getValidRoomType() {
+        System.out.println(">>> Please! Enter the type of the room (1. Single 2. Double): ");
         String roomType = "";
         while (true) {
             roomType = scanner.nextLine().trim();
-            if (roomType.equals("1") || roomType.equals("2")) { return roomType; }
+            if (roomType.equals("1") || roomType.equals("2")) {
+                return (roomType.equals("1")) ? RoomType.SINGLE : RoomType.DOUBLE;
+            }
             System.out.println("ERROR: Invalid input. Please! Enter 1 or 2: ");
         }
     }
 
+    public boolean wantToGenerateFreeRoom() {
+        System.out.println(">>> Is this a free room (y/n)? ");
+        String isFreeRoom = this.getValidInputYesNo();
+        return isFreeRoom.equalsIgnoreCase("y");
+    }
+
     public String getValidRoomNumber() {
-        while (true) {
-            try { return String.valueOf(scanner.nextInt()); }
-            catch (InputMismatchException exception) {
-                System.out.println("ERROR: Invalid option. Please! Enter a number: " + scanner.next());
-            }
+        System.out.println(">>> Please! Enter a room number (e.g. 101): ");
+        int roomNumber = this.getValidIntegerInput();
+        while (roomNumber < 0) {
+            System.out.println("ERROR: Room number cannot be negative.");
+            roomNumber = this.getValidIntegerInput();
         }
+        return Integer.toString(roomNumber);
     }
 
     public void clearScreen() {

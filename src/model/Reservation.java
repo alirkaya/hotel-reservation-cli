@@ -1,6 +1,7 @@
 package model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public class Reservation {
 
@@ -48,5 +49,21 @@ public class Reservation {
                 "\nTotal Cost     : " + "US$" + String.format("%.2f", durationOfStay * room.getRoomPrice()) +
                 " (" + string_price + " x " + durationOfStay + " nights)" +
                 "\n=====================================================";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Reservation reservation)) return false;
+
+        return Objects.equals(customer, reservation.customer) &&
+                Objects.equals(room, reservation.room) &&
+                Objects.equals(checkInDate, reservation.checkInDate) &&
+                Objects.equals(checkOutDate, reservation.checkOutDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(customer, room, checkInDate, checkOutDate);
     }
 }

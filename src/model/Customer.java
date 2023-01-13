@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Customer {
 
     public String firstName;
@@ -47,5 +49,21 @@ public class Customer {
                 "Full Name : " + firstName.toUpperCase() + " " + lastName.toUpperCase() +
                 "\nEmail     : " + email +
                 "\n=====================================================";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Customer)) return false;
+
+        Customer customer = (Customer) o;
+        return Objects.equals(firstName, customer.firstName) &&
+                Objects.equals(lastName, customer.lastName) &&
+                Objects.equals(email, customer.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, email);
     }
 }

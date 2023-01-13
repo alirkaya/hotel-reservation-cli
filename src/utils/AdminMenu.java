@@ -61,10 +61,7 @@ public class AdminMenu {
         ArrayList<String> roomNumbers = new ArrayList<>();
 
         String userResponse = "y";
-        consoleManager.readStringInput();
-
         while (userResponse.equalsIgnoreCase("y")) {
-            System.out.println(">>> Please! Enter room number (e.g. 101): ");
             String roomNumber = consoleManager.getValidRoomNumber();
 
             if (roomNumbers.contains(roomNumber)) {
@@ -73,21 +70,11 @@ public class AdminMenu {
             }
             roomNumbers.add(roomNumber);
 
-            System.out.println(">>> Please! Enter the type of the room (1. Single 2. Double): ");
-            String roomType = consoleManager.getValidRoomType();
-            RoomType enumeration = (roomType.equals("1")) ? RoomType.SINGLE : RoomType.DOUBLE;
-            consoleManager.readStringInput();
-
-            System.out.println(">>> Is this a free room (y/n)? ");
-            String isFreeRoom = consoleManager.getValidInputYesNo();
-            if (isFreeRoom.equalsIgnoreCase("y")) {
-                rooms.add(new FreeRoom(roomNumber, enumeration));
-            }
+            RoomType enumeration = consoleManager.getValidRoomType();
+            if (consoleManager.wantToGenerateFreeRoom()) { rooms.add(new FreeRoom(roomNumber, enumeration)); }
             else {
-                System.out.println(">>>Please! Enter the room price (e.g. 79.99): ");
-                Double roomPrice = consoleManager.readDoubleInput();
+                Double roomPrice = consoleManager.getValidRoomPrice();
                 rooms.add(new Room(roomNumber, roomPrice, enumeration));
-                consoleManager.readStringInput();
             }
 
             System.out.println(">>> Would you like to add another room (y/n)?");
