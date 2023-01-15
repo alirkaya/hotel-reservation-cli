@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 public class ReservationService {
 
-    private final Map<String, IRoom> rooms = new HashMap<String, IRoom>();
+    private final HashSet<IRoom> rooms = new HashSet<IRoom>();
     private final Map<String, ArrayList<Reservation>> reservations = new HashMap<String, ArrayList<Reservation>>();
 
 
@@ -22,31 +22,34 @@ public class ReservationService {
 
 
     public void addRoom(IRoom room) {
-        String roomNumber = room.getRoomNumber();
-        if (rooms.containsKey(roomNumber)) {
-            System.out.println("Room " + roomNumber + " already exists.");
+        if (rooms.contains(room)) {
+            System.out.println("Room " + room.getRoomNumber() + " already exists.");
             return;
         }
-        rooms.put(roomNumber, room);
-        System.out.println("Room " + roomNumber + " has been successfully added.");
+        rooms.add(room);
+        System.out.println("Room " + room.getRoomNumber() + " has been successfully added.");
 
     }
 
     public IRoom getARoom(String roomId) {
-        if (rooms.containsKey(roomId)) return rooms.get(roomId);
+        for(IRoom room: rooms) {
+            if (roomId.equalsIgnoreCase(room.getRoomNumber())) {
+                return room;
+            }
+        }
         System.out.println("ERROR: Room " + roomId + " doesn't exists. Please! double-check the room number.");
         return null;
     }
 
     // https://stackoverflow.com/questions/19064109/java-how-to-sort-custom-type-arraylist
     public Reservation reserveARoom(Customer customer, IRoom room, LocalDate checkInDate, LocalDate checkOutDate) {
-        if (!rooms.containsKey(room.getRoomNumber())) {
+        if (!rooms.contains(room)) {
             System.out.println(
                     "ERROR: Room " + room.getRoomNumber() + " doesn't exist. Please! double-check the room number");
             return null;
         }
 
-        Collection<IRoom> availableRooms = this.findRooms(checkInDate, checkOutDate);  //TODO correct this one for getting an empty list of rooms
+        Collection<IRoom> availableRooms = this.findRooms(checkInDate, checkOutDate);
         if (availableRooms.isEmpty()) {
             return null;
         }
@@ -91,23 +94,23 @@ public class ReservationService {
 
     public Collection<IRoom> findRooms(LocalDate checkInDate, LocalDate checkOutDate) {
 
-        if (rooms.isEmpty() || reservations.isEmpty()) { return rooms.values(); }
+        if (rooms.isEmpty() || reservations.isEmpty()) { return rooms; }
 
-        ArrayList<String> bookedRooms = new ArrayList<>();
+        ArrayList<IRoom> bookedRooms = new ArrayList<>();
         for (Map.Entry<String, ArrayList<Reservation>> reservationEntry: reservations.entrySet()) {
             ArrayList<Reservation> customerReservation = reservationEntry.getValue();
 
             for (Reservation record: customerReservation) {
                 if (!record.getCheckOutDate().isBefore(checkInDate)) {
-                    bookedRooms.add(record.getRoom().getRoomNumber());
+                    bookedRooms.add(record.getRoom());
                 }
             }
         }
 
         ArrayList<IRoom> availableRooms = new ArrayList<>();
-        for (Map.Entry<String, IRoom> roomEntry: rooms.entrySet()) {
-            if (!bookedRooms.contains(roomEntry.getKey())) {
-                availableRooms.add(roomEntry.getValue());
+        for (IRoom room : rooms) {
+            if (!bookedRooms.contains(room)) {
+                availableRooms.add(room);
             }
         }
 
@@ -146,6 +149,6 @@ public class ReservationService {
     }
 
     public Collection<IRoom> getAllRooms() {
-        return rooms.values();
+        return rooms;
     }
 }
